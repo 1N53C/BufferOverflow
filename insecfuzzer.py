@@ -20,30 +20,31 @@ def banner():
     print(colors.BANNER + " |   /    |    \/       \ /       \     \____  |     \  |    |  / /     /_  /     /_ ")
     print(colors.BANNER + " |___\____|__  /______  //______  /\______  /  \___  /  |______/ /_______ \/_______ \\")
     print(colors.BANNER + "             \/       \/        \/        \/       \/                    \/        \/" + colors.ENDC)
-    print(colors.WARNING +"*****************************  Fuzzer by invasive-security.de  *********************** " + colors.ENDC)
+    print(colors.WARNING +"***************************  Fuzzer by invasive-security.de  ************************* " + colors.ENDC)
+    print(colors.WARNING + "[!] This script sends a buffer of 200 * \x41 in each iteration" + colors.ENDC)
 
 def usage():
-    print(colors.OKGREEN + "USAGE: ./insecfuzzer.py <ip> <port>" + colors.ENDC)
-    print(colors.OKGREEN + "Example: ./insecfuzzer.py 127.0.0.1 21" + colors.ENDC)
+    print(colors.OKGREEN + "USAGE: ./insecfuzzer.py <ip> <port> <iterations>" + colors.ENDC)
+    print(colors.OKGREEN + "Example: ./insecfuzzer.py 127.0.0.1 21 25" + colors.ENDC)
 
 banner()
-usage()
 
-# implement argv host, port, bufferlength
 host = str(sys.argv[1]) 
-port = sys.argv[2]         
+port = int(sys.argv[2])         
+length = int(sys.argv[3])
 
-print(host)
-print port
+if len(sys.argv) < 4:
+    usage()
+    sys.exit()
+    
 
 buffer = ['\x41'] 
-buffer_length = 100
 
-'''
+
 while len(buffer) <= 30:
-    buffer.append('\x41' * buffer_length)
-    buffer_length = buffer_length + 200
-    print("Buffer: " + str(buffer_length) + "\r\n")
+    buffer.append('\x41' * length)
+    length += 200 
+    print("[*] Sending Buffer with a length of: " + str(length) + " Bytes \r\n")
     
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -51,4 +52,3 @@ s.connect((host, port))
 data = s.recv(1024)
 s.send(buffer)
 data = s.recv(1024)
-'''
